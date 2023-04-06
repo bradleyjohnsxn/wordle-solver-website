@@ -13,7 +13,7 @@ class  wordle_solver():
 
     # load 5 letter words from file
     def load_words(self):
-        filepath = 'data/5letterwords.txt'
+        filepath = 'data/5letterwords-updated.txt'
         word_file = open(filepath, 'r')
         self.words = word_file.readlines()
         for i in range(len(self.words)): self.words[i]=self.words[i][:5]

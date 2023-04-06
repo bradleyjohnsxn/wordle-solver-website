@@ -26,7 +26,7 @@ if __name__=='__main__':
     print(f'words in original csv file   : {len(words_csv)}')
     print(f'word count total             : {len(words_merged)}')
 
-    filepath = 'data/5letterwords-updated'
+    filepath = 'data/5letterwords-updated.txt'
     file = open(filepath, 'w')
     for word in words_merged:
         file.write(word+'\n')
