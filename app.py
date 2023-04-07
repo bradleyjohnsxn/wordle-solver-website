@@ -25,7 +25,9 @@ def show_index_html():
         the_id = request.form['my_id']
         if the_id=='g':
             green = request.form['green']
-            if len(green)==5: valid='true'
+            if len(green)==5: 
+                valid='true'
+                ws.add_green(green)
             else: valid = 'false'
             new_green = wordle(str=green, valid=valid, color=the_id)
             if green=='': return redirect('/')
@@ -37,7 +39,9 @@ def show_index_html():
                 return "there was an issue adding your green"
         elif the_id=='y':
             yellow = request.form['yellow']
-            if len(yellow)==5: valid='true'
+            if len(yellow)==5: 
+                valid='true'
+                ws.add_yellow(yellow)
             else: valid = 'false'
             new_yellow = wordle(str=yellow, valid=valid, color=the_id)
             if yellow=='': return redirect('/')
@@ -49,6 +53,7 @@ def show_index_html():
                 return "there was an issue adding your yellows"
         elif the_id=='u':
             use = request.form['use']
+            ws.add_used(use)
             new_use = wordle(str=use, valid='true', color=the_id)
             if use=='': return redirect('/')
             try:
@@ -57,6 +62,22 @@ def show_index_html():
                 return redirect('/')
             except:
                 return "there was an issue adding your used letters"
+        elif the_id=='reset':
+            all = wordle.query.order_by(wordle.date_created).all()
+            for entry in all:
+                try:
+                    wordle_db.session.delete(entry)
+                    wordle_db.session.commit()
+                except:
+                    return 'there was a problem deleting that entry'
+            ws.reset()
+            greens=[]; yellows=[]; used=[]
+            possible = ws.get_possible()
+            print(possible)
+            possible = enumerate(possible, 1)
+
+            return render_template('wordle-solver.html', greens=greens, yellows=yellows, used=used, possible=possible)
+
     else:
         all = wordle.query.order_by(wordle.date_created).all()
         greens=[]; yellows=[]; used=[]
@@ -68,7 +89,10 @@ def show_index_html():
             elif entry.color=='u': 
                 used += [entry]
 
-        return render_template('wordle-solver.html', greens=greens, yellows=yellows, used=used)
+        possible = ws.get_possible()
+        possible = enumerate(possible, 1)
+
+        return render_template('wordle-solver.html', greens=greens, yellows=yellows, used=used, possible=possible)
     
 @app.route('/delete/<int:id>')
 def delete(id):
@@ -78,7 +102,7 @@ def delete(id):
         wordle_db.session.commit()
         return redirect('/')
     except:
-        return 'there was a problem deleting that task'
+        return 'there was a problem deleting that entry'
 
 if __name__ == '__main__':
     app.run(debug=True)

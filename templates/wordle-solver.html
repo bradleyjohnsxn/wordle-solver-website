@@ -7,7 +7,7 @@
 {% block body %}
 <h1 style="color:magenta;text-align:center">wordle solver</h1>
 
-<div class="wordle" style="float:left;margin:25px">
+<div class="wordle" style="float:left;margin-left:200px;margin-top:50px">
   <table border="1px solid black" width="500px" align="center">
     <tr>
       <th style="color:rgb(1, 111, 47)">greens</th>
@@ -102,5 +102,22 @@
     <input type="text" name="use" id="use">
     <input type="submit" value="add used">
   </form>
+</div>
+
+<div class="possible" style="float:right;margin-right:200px;margin-top:25px">
+  <form action="/" method="POST" align="center">
+    <p align="left">click here to start a new word</p>
+    <input value = "reset" type="hidden" name="my_id">
+    <input type="submit" value="new word">
+  </form>
+  <br><br>
+  
+  
+  <h2 align="left">possible words</h2>
+  {% for word in possible %}
+    <p align="left">{{word[0]}}. {{word[1]}}</p>
+  {% endfor %}
+
+
 </div>
 {% endblock %}

@@ -6,7 +6,7 @@ class  wordle_solver():
     def __init__(self):
         self.load_words()
         self.load_word_freqs()
-        self.possible = self.words
+        self.possible = self.words.copy()
         self.greens = np.array([])
         self.yellows = np.array([])
         self.used = np.array([])
@@ -97,22 +97,30 @@ class  wordle_solver():
         res = np.sort(res)[::-1]
         for i in res: self.possible.remove(self.possible[i])
 
-    # sort and print possible words
-    def print_possible(self):
+    # get first 10 possible words
+    def get_possible(self):
         stacked = dict()
         for word in self.possible:
             try: stacked[word] = int(self.freqs[word])
             except KeyError as ke: stacked[word] = 0   
 
         stacked = {k: v for k, v in np.array(sorted(stacked.items(), key=lambda item: item[1]))[::-1]}
-        print(f'\n{len(ws.possible)} possible word(s):')
+        poss = []
         for num, word in enumerate(stacked.keys(), 1): 
-            if num < 11: print(f'{num}. {word}')
+            if num < 11: poss += [word]
             else: break
+        return poss
+    
+    # sort and print possible words
+    def print_possible(self):
+        poss = self.get_possible()
+        print(f'\n{len(ws.possible)} possible word(s):')
+        for i, w in enumerate(poss, 1):
+            print(f'{i}. {w}')
 
     # reset
     def reset(self):
-        self.possible = self.words
+        self.possible = self.words.copy()
         self.greens = np.array([])
         self.yellows = np.array([])
         self.used = np.array([])
