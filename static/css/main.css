@@ -11,13 +11,13 @@ div{
 
 .wordle{
     border: 1px solid black;
-    width: 40vw;
+    width: 35vw;
     margin-left: 5vw;
     margin-right: 0vw
 }
 
 .possible{
-    width: 30vw;
+    width: 25vw;
     margin-left: 0vw;
     margin-right: 5vw
 }
