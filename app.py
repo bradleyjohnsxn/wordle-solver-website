@@ -4,7 +4,7 @@ from datetime import datetime
 import wordle_solver
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///wordle_solver.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 wordle_db = SQLAlchemy(app)
 ws = wordle_solver.wordle_solver()
