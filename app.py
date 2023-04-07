@@ -1,57 +1,84 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import wordle_solver
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+wordle_db = SQLAlchemy(app)
+ws = wordle_solver.wordle_solver()
 
-class datab(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    content = db.Column(db.String(200), nullable=False)
-    data_created = db.Column(db.DateTime, default=datetime.utcnow)
+class wordle(wordle_db.Model):
+    id = wordle_db.Column(wordle_db.Integer, primary_key=True)
+    str = wordle_db.Column(wordle_db.String(200), nullable=False)
+    valid = wordle_db.Column(wordle_db.String(20), nullable=False)
+    color = wordle_db.Column(wordle_db.String(20), nullable=False)
+    date_created = wordle_db.Column(wordle_db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Task %r>' % self.id
+        return '<entry %r>' % self.id
 
 @app.route('/', methods=['POST', 'GET'])
 def show_index_html():
     if request.method == 'POST':
-        task_content = request.form['content']
-        new_task = datab(content=task_content)
-        try:
-            db.session.add(new_task)
-            db.session.commit()
-            return redirect('/')
-        except:
-            return "there was an issue adding your task"
+        the_id = request.form['my_id']
+        if the_id=='g':
+            green = request.form['green']
+            if len(green)==5: valid='true'
+            else: valid = 'false'
+            new_green = wordle(str=green, valid=valid, color=the_id)
+            if green=='': return redirect('/')
+            try:
+                wordle_db.session.add(new_green)
+                wordle_db.session.commit()
+                return redirect('/')
+            except:
+                return "there was an issue adding your green"
+        elif the_id=='y':
+            yellow = request.form['yellow']
+            if len(yellow)==5: valid='true'
+            else: valid = 'false'
+            new_yellow = wordle(str=yellow, valid=valid, color=the_id)
+            if yellow=='': return redirect('/')
+            try:
+                wordle_db.session.add(new_yellow)
+                wordle_db.session.commit()
+                return redirect('/')
+            except:
+                return "there was an issue adding your yellows"
+        elif the_id=='u':
+            use = request.form['use']
+            new_use = wordle(str=use, valid='true', color=the_id)
+            if use=='': return redirect('/')
+            try:
+                wordle_db.session.add(new_use)
+                wordle_db.session.commit()
+                return redirect('/')
+            except:
+                return "there was an issue adding your used letters"
     else:
-        tasks = datab.query.order_by(datab.data_created).all()
-        return render_template('wordle-solver.html', tasks=tasks)
+        all = wordle.query.order_by(wordle.date_created).all()
+        greens=[]; yellows=[]; used=[]
+        for entry in all:
+            if entry.color=='g': 
+                greens += [entry]
+            elif entry.color=='y': 
+                yellows += [entry]
+            elif entry.color=='u': 
+                used += [entry]
+
+        return render_template('wordle-solver.html', greens=greens, yellows=yellows, used=used)
     
 @app.route('/delete/<int:id>')
 def delete(id):
-    task_to_delete = datab.query.get_or_404(id)
+    entry_to_delete = wordle.query.get_or_404(id)
     try:
-        db.session.delete(task_to_delete)
-        db.session.commit()
+        wordle_db.session.delete(entry_to_delete)
+        wordle_db.session.commit()
         return redirect('/')
     except:
         return 'there was a problem deleting that task'
-
-@app.route('/update/<int:id>', methods=['GET', 'POST'])
-def update(id):
-    task = datab.query.get_or_404(id)
-    if request.method=='POST':
-        task.content = request.form['content']
-        try:
-            db.session.commit()
-            return redirect('/')
-        except:
-            return 'there was a problem updating that task'
-    else:
-        return render_template('update.html', task=task)
 
 if __name__ == '__main__':
     app.run(debug=True)

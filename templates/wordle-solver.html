@@ -1,47 +1,106 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>task master</title>
+<title>wordle solver</title>
 {% endblock %}
 
 {% block body %}
-<div class="content">
-  <h1 style="color:magenta;text-align:center">Task Master</h1>
+<h1 style="color:magenta;text-align:center">wordle solver</h1>
 
+<div class="wordle" style="float:left;margin:25px">
   <table border="1px solid black" width="500px" align="center">
     <tr>
-      <th>Task</th>
-      <th>Added</th>
-      <th>Actions</th>
+      <th style="color:rgb(1, 111, 47)">greens</th>
+      <th>valid?</th>
+      <th>actions</th>
     </tr>
-    {% for task in tasks %}
+    {% for green in greens %}
       <tr>
-        <td>{{task.content}}</td>
-        <td>{{task.data_created.date()}}</td>
+        <td>{{green.str}}</td>
+        <td>{{green.valid}}</td>
         <td>
-          <a href="/delete/{{task.id}}">Delete</a>
-          <br>
-          <a href="/update/{{task.id}}">Update</a>
+          <!-- {% if green.valid == 'false' %}
+          <a href="/delete/{{green.id}}">Delete</a>
+          {%endif%} -->
+          <a href="/delete/{{green.id}}">Delete</a>
         </td>
       </tr>
     {% endfor %}
-    {% if tasks is defined and tasks|length<1 %}
-      <tr>
-        <td></td>
-        <td></td>
-        <td>
-          <a href="">Delete</a>
-          <br>
-          <a href="">Update</a>
-        </td>
-      </tr>
-    {%endif%}
   </table>
+  {% if greens is defined and greens|length<1 %}
+    <p align="center">No greens entered. Enter greens in their correct position.</p>
+    <p align="center">Valid responses must be 5 characters long. (Ex. p--n-)</p>
+  {%endif%}
 
   <br>
   <form action="/" method="POST" align="center">
-    <input type="text" name="content" id="content">
-    <input type="submit" value="add task">
+    <input value = "g" type="hidden" name="my_id">
+    <input type="text" name="green" id="green">
+    <input type="submit" value="add greens">
+  </form>
+  <br><br><br><br>
+
+  <table border="1px solid black" width="500px" align="center">
+    <tr>
+      <th style="color:rgb(141, 184, 33)">yellows</th>
+      <th>valid?</th>
+      <th>actions</th>
+    </tr>
+    {% for yellow in yellows %}
+      <tr>
+        <td>{{yellow.str}}</td>
+        <td>{{yellow.valid}}</td>
+        <td>
+          <!-- {% if yellow.valid == 'false' %}
+          <a href="/delete/{{yellow.id}}">Delete</a>
+          {%endif%} -->
+          <a href="/delete/{{yellow.id}}">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% if yellows is defined and yellows|length<1 %}
+    <p align="center">No yellows entered. Enter yellows in their correct position.</p>
+    <p align="center">Valid responses must be 5 characters long. (Ex. --a--)</p>
+  {%endif%}
+
+  <br>
+  <form action="/" method="POST" align="center">
+    <input value = "y" type="hidden" name="my_id">
+    <input type="text" name="yellow" id="yellow">
+    <input type="submit" value="add yellows">
+  </form>
+  <br><br><br><br>
+
+  <table border="1px solid black" width="500px" align="center">
+    <tr>
+      <th style="color:rgb(88, 96, 91)">used</th>
+      <th>valid?</th>
+      <th>actions</th>
+    </tr>
+    {% for use in used %}
+      <tr>
+        <td>{{use.str}}</td>
+        <td>{{use.valid}}</td>
+        <td>
+          <!-- {% if use.valid == 'false' %}
+          <a href="/delete/{{use.id}}">Delete</a>
+          {%endif%} -->
+          <a href="/delete/{{use.id}}">Delete</a>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% if used is defined and used|length<1 %}
+    <p align="center">No used letters entered.</p>
+    <p align="center">Enter used letters that are not yellow or green. (Ex. ls)</p>
+  {%endif%}
+
+  <br>
+  <form action="/" method="POST" align="center">
+    <input value = "u" type="hidden" name="my_id">
+    <input type="text" name="use" id="use">
+    <input type="submit" value="add used">
   </form>
 </div>
 {% endblock %}

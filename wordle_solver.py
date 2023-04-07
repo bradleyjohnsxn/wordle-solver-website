@@ -13,7 +13,7 @@ class  wordle_solver():
 
     # load 5 letter words from file
     def load_words(self):
-        filepath = 'data/5letterwords-updated.txt'
+        filepath = 'data/5letterwords.txt'
         word_file = open(filepath, 'r')
         self.words = word_file.readlines()
         for i in range(len(self.words)): self.words[i]=self.words[i][:5]
@@ -109,6 +109,13 @@ class  wordle_solver():
         for num, word in enumerate(stacked.keys(), 1): 
             if num < 11: print(f'{num}. {word}')
             else: break
+
+    # reset
+    def reset(self):
+        self.possible = self.words
+        self.greens = np.array([])
+        self.yellows = np.array([])
+        self.used = np.array([])
 
 
 if __name__=='__main__':
