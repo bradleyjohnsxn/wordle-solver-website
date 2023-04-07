@@ -1,4 +1,17 @@
-body{
-    margin: 0;
-    font-family: sans-serif;
+h1{
+    color:white;
+    background-color: black;
+    text-align:center; 
+}
+
+div{
+    margin-top: 5vh;
+    width: 35vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+    font-size:medium
+}
+
+.wordle{
+    border: 1px solid black;
 }

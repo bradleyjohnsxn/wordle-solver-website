@@ -5,18 +5,19 @@
 {% endblock %}
 
 {% block body %}
-<h1 style="color:magenta;text-align:center">wordle solver</h1>
+<h1>WORDLE SOLVER</h1>
 
-<div class="wordle" style="float:left;margin-left:200px;margin-top:50px">
-  <table border="1px solid black" width="500px" align="center">
+<div class="wordle" style="float:left;">
+  <br>
+  <table border="1px solid black" width="225px" align="center">
     <tr>
-      <th style="color:rgb(1, 111, 47)">greens</th>
-      <th>valid?</th>
-      <th>actions</th>
+      <th style="color:rgb(15, 168, 79); align-content:center">greens</th>
+      <th width="33px">valid?</th>
+      <th width="33px">action</th>
     </tr>
     {% for green in greens %}
       <tr>
-        <td>{{green.str}}</td>
+        <td align="center">{{green.str}}</td>
         <td>{{green.valid}}</td>
         <td>
           <a href="/delete/{{green.id}}">Delete</a>
@@ -35,17 +36,17 @@
     <input type="text" name="green" id="green">
     <input type="submit" value="add greens">
   </form>
-  <br><br><br><br>
+  <br><br><br>
 
-  <table border="1px solid black" width="500px" align="center">
+  <table border="1px solid black" width="200px" align="center">
     <tr>
-      <th style="color:rgb(141, 184, 33)">yellows</th>
-      <th>valid?</th>
-      <th>actions</th>
+      <th style="color:rgb(196, 237, 91); align-content:center">yellows</th>
+      <th width="33px">valid?</th>
+      <th width="33px">action</th>
     </tr>
     {% for yellow in yellows %}
       <tr>
-        <td>{{yellow.str}}</td>
+        <td align="center">{{yellow.str}}</td>
         <td>{{yellow.valid}}</td>
         <td>
           <a href="/delete/{{yellow.id}}">Delete</a>
@@ -64,17 +65,17 @@
     <input type="text" name="yellow" id="yellow">
     <input type="submit" value="add yellows">
   </form>
-  <br><br><br><br>
+  <br><br><br>
 
-  <table border="1px solid black" width="500px" align="center">
+  <table border="1px solid black" width="200px" align="center">
     <tr>
-      <th style="color:rgb(88, 96, 91)">used</th>
-      <th>valid?</th>
-      <th>actions</th>
+      <th style="color:rgb(88, 96, 91); align-content:center">used</th>
+      <th width="33px">valid?</th>
+      <th width="33px">action</th>
     </tr>
     {% for use in used %}
       <tr>
-        <td>{{use.str}}</td>
+        <td align="center">{{use.str}}</td>
         <td>{{use.valid}}</td>
         <td>
           <a href="/delete/{{use.id}}">Delete</a>
@@ -93,10 +94,11 @@
     <input type="text" name="use" id="use">
     <input type="submit" value="add used">
   </form>
+  <br>
 </div>
 
-<div class="possible" style="float:right;margin-right:200px;margin-top:25px">
-  <form action="/" method="POST" align="center">
+<div class="possible" style="float:right;">
+  <form action="/" method="POST" align="left">
     <p align="left">click here to start a new word</p>
     <input value = "reset" type="hidden" name="my_id">
     <input type="submit" value="new word">
