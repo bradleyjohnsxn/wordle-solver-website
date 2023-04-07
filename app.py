@@ -30,10 +30,10 @@ def read_db():
 
 def initialize_ws(greens, yellows, used):
     for g in greens:
-        if g.valid=='true': ws.add_green(g.str)
+        if g.valid=='true': ws.add_green(g.str.lower())
     for y in yellows:
-        if y.valid=='true': ws.add_yellow(y.str)
-    for u in used: ws.add_used(u.str)
+        if y.valid=='true': ws.add_yellow(y.str.lower())
+    for u in used: ws.add_used(u.str.lower())
 
 @app.route('/', methods=['POST', 'GET'])
 def show_index_html():
@@ -44,7 +44,7 @@ def show_index_html():
         # only incorporate valid responses into wordle solver
         if the_id=='g':
             green = request.form['green']
-            if len(green)==5: valid='true'; ws.add_green(green)
+            if len(green)==5: valid='true'; ws.add_green(green.lower())
             else: valid = 'false'
             new_green = wordle(str=green, valid=valid, color=the_id)
             if green=='': return redirect('/')
@@ -58,7 +58,7 @@ def show_index_html():
             
         elif the_id=='y':
             yellow = request.form['yellow']
-            if len(yellow)==5: valid='true'; ws.add_yellow(yellow)
+            if len(yellow)==5: valid='true'; ws.add_yellow(yellow.lower())
             else: valid = 'false'
             new_yellow = wordle(str=yellow, valid=valid, color=the_id)
             if yellow=='': return redirect('/')
@@ -72,7 +72,7 @@ def show_index_html():
             
         elif the_id=='u':
             use = request.form['use']
-            ws.add_used(use)
+            ws.add_used(use.lower())
             new_use = wordle(str=use, valid='true', color=the_id)
             if use=='': return redirect('/')
 
