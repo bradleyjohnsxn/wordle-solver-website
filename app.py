@@ -18,6 +18,30 @@ class wordle(wordle_db.Model):
 
     def __repr__(self):
         return '<entry %r>' % self.id
+    
+def read_db():
+    all = wordle.query.order_by(wordle.date_created).all()
+    greens=[]; yellows=[]; used=[]
+    for entry in all:
+        if entry.color=='g': 
+            greens += [entry]
+        elif entry.color=='y': 
+            yellows += [entry]
+        elif entry.color=='u': 
+            used += [entry]
+    return greens, yellows, used
+
+def initialize_ws(greens, yellows, used):
+    for g in greens:
+        if g.valid=='true':
+            ws.add_green(g.str)
+    for y in yellows:
+        if y.valid=='true':
+            ws.add_yellow(y.str)
+    for u in used:
+        ws.add_used(u.str)
+
+
 
 @app.route('/', methods=['POST', 'GET'])
 def show_index_html():
@@ -72,26 +96,13 @@ def show_index_html():
                     return 'there was a problem deleting that entry'
             ws.reset()
             greens=[]; yellows=[]; used=[]
-            possible = ws.get_possible()
-            print(possible)
-            possible = enumerate(possible, 1)
-
+            possible = enumerate(ws.get_possible(), 1)
             return render_template('wordle-solver.html', greens=greens, yellows=yellows, used=used, possible=possible)
 
     else:
-        all = wordle.query.order_by(wordle.date_created).all()
-        greens=[]; yellows=[]; used=[]
-        for entry in all:
-            if entry.color=='g': 
-                greens += [entry]
-            elif entry.color=='y': 
-                yellows += [entry]
-            elif entry.color=='u': 
-                used += [entry]
-
-        possible = ws.get_possible()
-        possible = enumerate(possible, 1)
-
+        greens, yellows, used = read_db()
+        initialize_ws(greens, yellows, used)
+        possible = enumerate(ws.get_possible(), 1)
         return render_template('wordle-solver.html', greens=greens, yellows=yellows, used=used, possible=possible)
     
 @app.route('/delete/<int:id>')
