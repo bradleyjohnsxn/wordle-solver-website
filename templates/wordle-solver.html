@@ -28,9 +28,10 @@
   {% if greens is defined and greens|length<1 %}
     <p align="center">No greens entered. Enter greens in their correct position.</p>
     <p align="center">Valid responses must be 5 characters long. (Ex. p--n-)</p>
+  {%else%}
+    <br>
   {%endif%}
-
-  <br>
+  
   <form action="/" method="POST" align="center">
     <input value = "g" type="hidden" name="my_id">
     <input type="text" name="green" id="green">
@@ -57,9 +58,10 @@
   {% if yellows is defined and yellows|length<1 %}
     <p align="center">No yellows entered. Enter yellows in their correct position.</p>
     <p align="center">Valid responses must be 5 characters long. (Ex. --a--)</p>
+  {%else%}
+    <br>
   {%endif%}
 
-  <br>
   <form action="/" method="POST" align="center">
     <input value = "y" type="hidden" name="my_id">
     <input type="text" name="yellow" id="yellow">
@@ -86,9 +88,10 @@
   {% if used is defined and used|length<1 %}
     <p align="center">No used letters entered.</p>
     <p align="center">Enter used letters that are not yellow or green. (Ex. ls)</p>
+  {%else%}
+    <br>
   {%endif%}
 
-  <br>
   <form action="/" method="POST" align="center">
     <input value = "u" type="hidden" name="my_id">
     <input type="text" name="use" id="use">
