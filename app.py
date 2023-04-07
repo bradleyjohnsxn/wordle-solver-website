@@ -23,77 +23,76 @@ def read_db():
     all = wordle.query.order_by(wordle.date_created).all()
     greens=[]; yellows=[]; used=[]
     for entry in all:
-        if entry.color=='g': 
-            greens += [entry]
-        elif entry.color=='y': 
-            yellows += [entry]
-        elif entry.color=='u': 
-            used += [entry]
+        if entry.color=='g': greens += [entry]
+        elif entry.color=='y': yellows += [entry]
+        elif entry.color=='u': used += [entry]
     return greens, yellows, used
 
 def initialize_ws(greens, yellows, used):
     for g in greens:
-        if g.valid=='true':
-            ws.add_green(g.str)
+        if g.valid=='true': ws.add_green(g.str)
     for y in yellows:
-        if y.valid=='true':
-            ws.add_yellow(y.str)
-    for u in used:
-        ws.add_used(u.str)
-
-
+        if y.valid=='true': ws.add_yellow(y.str)
+    for u in used: ws.add_used(u.str)
 
 @app.route('/', methods=['POST', 'GET'])
 def show_index_html():
     if request.method == 'POST':
         the_id = request.form['my_id']
+
+        # check which form submitted
+        # only incorporate valid responses into wordle solver
         if the_id=='g':
             green = request.form['green']
-            if len(green)==5: 
-                valid='true'
-                ws.add_green(green)
+            if len(green)==5: valid='true'; ws.add_green(green)
             else: valid = 'false'
             new_green = wordle(str=green, valid=valid, color=the_id)
             if green=='': return redirect('/')
+
             try:
                 wordle_db.session.add(new_green)
                 wordle_db.session.commit()
                 return redirect('/')
             except:
                 return "there was an issue adding your green"
+            
         elif the_id=='y':
             yellow = request.form['yellow']
-            if len(yellow)==5: 
-                valid='true'
-                ws.add_yellow(yellow)
+            if len(yellow)==5: valid='true'; ws.add_yellow(yellow)
             else: valid = 'false'
             new_yellow = wordle(str=yellow, valid=valid, color=the_id)
             if yellow=='': return redirect('/')
+
             try:
                 wordle_db.session.add(new_yellow)
                 wordle_db.session.commit()
                 return redirect('/')
             except:
                 return "there was an issue adding your yellows"
+            
         elif the_id=='u':
             use = request.form['use']
             ws.add_used(use)
             new_use = wordle(str=use, valid='true', color=the_id)
             if use=='': return redirect('/')
+
             try:
                 wordle_db.session.add(new_use)
                 wordle_db.session.commit()
                 return redirect('/')
             except:
                 return "there was an issue adding your used letters"
+            
         elif the_id=='reset':
             all = wordle.query.order_by(wordle.date_created).all()
             for entry in all:
+
                 try:
                     wordle_db.session.delete(entry)
                     wordle_db.session.commit()
                 except:
                     return 'there was a problem deleting that entry'
+                
             ws.reset()
             greens=[]; yellows=[]; used=[]
             possible = enumerate(ws.get_possible(), 1)
@@ -107,6 +106,8 @@ def show_index_html():
     
 @app.route('/delete/<int:id>')
 def delete(id):
+    
+    # if a valid entry is being deleted, then reinitialize the wordle solver
     entry_to_delete = wordle.query.get_or_404(id)
     try:
         wordle_db.session.delete(entry_to_delete)

@@ -125,7 +125,7 @@ class  wordle_solver():
         self.yellows = np.array([])
         self.used = np.array([])
 
-
+# can run in command line. NO VALIDITY CHECKS
 if __name__=='__main__':
     go = True
     while go:
