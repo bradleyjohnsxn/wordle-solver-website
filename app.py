@@ -111,6 +111,10 @@ def delete(id):
     try:
         wordle_db.session.delete(entry_to_delete)
         wordle_db.session.commit()
+        if entry_to_delete.valid=='true':
+            ws.reset()
+            greens, yellows, used = read_db()
+            initialize_ws(greens, yellows, used)
         return redirect('/')
     except:
         return 'there was a problem deleting that entry'
