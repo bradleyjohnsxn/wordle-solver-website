@@ -27,7 +27,7 @@
   </table>
   {% if greens is defined and greens|length<1 %}
     <p align="center">No greens entered. Enter greens in their correct position.</p>
-    <p align="center">Valid responses must be 5 characters long. (Ex. p--n-)</p>
+    <p align="center">Valid responses must be 5 characters long. (Ex. p..n.)</p>
   {%else%}
     <br>
   {%endif%}
@@ -57,7 +57,7 @@
   </table>
   {% if yellows is defined and yellows|length<1 %}
     <p align="center">No yellows entered. Enter yellows in their correct position.</p>
-    <p align="center">Valid responses must be 5 characters long. (Ex. --a--)</p>
+    <p align="center">Valid responses must be 5 characters long. (Ex. .a...)</p>
   {%else%}
     <br>
   {%endif%}
@@ -87,7 +87,7 @@
   </table>
   {% if used is defined and used|length<1 %}
     <p align="center">No used letters entered.</p>
-    <p align="center">Enter used letters that are not yellow or green. (Ex. ls)</p>
+    <p align="center">Enter used letters that are not yellow or green. (Ex. is)</p>
   {%else%}
     <br>
   {%endif%}
